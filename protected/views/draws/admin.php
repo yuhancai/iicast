@@ -45,15 +45,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
+		//'id',
 		'qishu',
 		'luckynum',
 		'begin_at',
 		'lucky_at',
 		'open_at',
-		/*
-		'itemid',
-		*/
+		
+		array(
+			'name'=>'itemid', 
+			'filter'=>CHtml::listData(Items::model()->findAll(),'id','itemname'),
+			//ok 'filter' => CHtml::activeDropDownList($model, 'itemid', CHtml::listData(Items::model()->findAll(), 'id', 'itemname'), array('prompt' => '66 ')),
+			'value'=>'$data->item->itemname',
+			   'htmlOptions'=>array('width'=>'90px'),
+		),
 		array(
 			'class'=>'CButtonColumn',
 		),

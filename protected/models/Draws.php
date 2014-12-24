@@ -46,6 +46,7 @@ class Draws extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'item'=>array(self::BELONGS_TO,'items','itemid')
 		);
 	}
 
@@ -95,7 +96,14 @@ class Draws extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-
+	public static function caculateDiffByMinutes($start,$end)
+	{
+		$datetime1 = strtotime($start);
+		$datetime2 = strtotime($end);
+		$interval  = abs($datetime2 - $datetime1);
+		$minutes   = round($interval / 60);
+		return $minutes;
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
