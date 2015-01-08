@@ -92,16 +92,55 @@ class Items extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-	public static function getInfoFromUrl($url)
+
+	public static function isInDb($fromurl)
 	{
-		$pattern='/\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/';
-		preg_match($pattern,$url, $matches);
-		$d=implode(explode('-',$matches[0]));
-		$a=array();
-		$a[]=substr($matches[0],0,5);//for itemtype
-		$a[]=substr($d,4);//for loops
-		return $a;
+	    $fromurl=(string)$fromurl;
+        $result= Yii::app()->db->createCommand()
+        ->select('itemname')
+        ->from('tbl_items')
+        ->where('forurl=:fl', array(':fl'=>$fromurl))
+        ->queryAll();
+        return (count($result)>0)?1:0;
 	}
+	
+	public static function insertData($fromurl)
+	{
+	 if(!Items::isInDb($fromurl))
+	 {
+	     $result= Yii::app()->db->createCommand()
+         ->insert('tbl_items', array(
+            'itemname' =>'joly1',
+            'forurl'=>$fromurl,
+          ))
+	     ->execute();	     
+     }
+	 else
+	 {
+	 	//doing nothing
+	 }
+    }   
+    public static function getInfoFromUrl($url)
+    {
+    	$pattern='/\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/';
+    	preg_match($pattern,$url, $matches);
+    	$d=implode(explode('-',$matches[0]));
+    	$a=array();
+    	$a[]=substr($matches[0],0,5);//for itemtype
+    	$a[]=substr($d,4);//for loops
+    	return $a;     	
+    }
+    
+    public static function getItemidFromForurl($fromurl)
+    {
+        $result= Yii::app()->db->createCommand()
+        ->select('id')
+        ->from('tbl_items')
+        ->where('forurl=:fl', array(':fl'=>$fromurl))
+        ->queryAll();
+        return $result[0]['id'];
+    }
+    
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

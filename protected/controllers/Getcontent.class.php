@@ -17,8 +17,8 @@ class Grep { // class start 2014-11-16 14:42:30.281 \d{4}-\d{2}-\d{2}\s?\d{2}:\d
 			'email' => '/([\w\-\.]+@[\w\-\.]+(\.\w+))/',
 			'image' => '/<img.*?src=\"(http:\/\/.+\.(jpg|jpeg|gif|bmp|png))\">/i',
 			'shijian' => '/(\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:\d{2})/',
-			'luckynum' => '/<span.*>(\d{8})\D/',
-			'dijiqi' => '/<title.*([\(][\S]*[\)])/' 
+			'luckynum' => '/<span class="resultCode">\D{0,}(\d{8})<\/span>/',
+			'dijiqi' => '/<title>\(\D{0,}(\d{1,}).+\).+<\/title>/' 
 	);
 	private $_content = ''; // Ô´ÄÚÈİ
 	

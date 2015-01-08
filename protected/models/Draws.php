@@ -96,6 +96,27 @@ class Draws extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	public static function getMaxQishuByItemid($itemid)
+	{
+        $result= Yii::app()->db->createCommand()
+        ->select('qishu')
+        ->from('tbl_draws')
+        ->where('itemid=:itemid', array(':itemid'=>$itemid))
+        ->order('qishu desc')
+        ->limit('1')
+        ->queryAll();
+		return $result[0]['qishu'];
+	}	
+	public static function itemidIsInDb($itemid)
+	{
+		$itemid=(int)$itemid;
+        $result= Yii::app()->db->createCommand()
+        ->select('*')
+        ->from('tbl_draws')
+        ->where('itemid=:itemid', array(':itemid'=>$itemid))
+        ->queryAll();
+		return (count($result)>0)?1:0;
+	}
 	public static function caculateDiffByMinutes($start,$end)
 	{
 		$datetime1 = strtotime($start);

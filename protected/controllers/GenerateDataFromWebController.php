@@ -12,7 +12,11 @@ class GenerateDataFromWebController extends Controller
 						'proxy'=>"proxysv:80"
 				)
 		);
-		$default = stream_context_set_default($default_opts);		
+		$default = stream_context_set_default($default_opts);	
+//print_r($this->getDataFromUrl("http://1.163.com/detail/01-48-00-07-53.html"));
+		
+		print_r($this->getAllDataFromUrl("http://1.163.com/detail/01-56-00-00-09.html"));
+		
 		$model=new GenerateDataForm();
 		
 		// Uncomment the following line if AJAX validation is needed
@@ -32,10 +36,10 @@ class GenerateDataFromWebController extends Controller
 		$duobaotime=$t[1];
 		$jieshutime=$t[2];
 		$jiexiaotime=$t[0];
-		$diji = $obj->get('dijiqi', 0);
-		$pattern='/\d{1,}/';
-		preg_match($pattern,$diji[0], $matches);
-		$diji=$matches[0];
+		$diji = $obj->get('dijiqi', 0)[0];
+		//$pattern='/\d{1,}/';
+		//preg_match($pattern,$diji[0], $matches);
+		//$diji=$matches[0];
 		$zhong = $obj->get('luckynum', 0)[0];
 		$info=array(
 				'duobaotime'=>$duobaotime,
@@ -50,10 +54,10 @@ class GenerateDataFromWebController extends Controller
 	public function getAllDataFromUrl($url=null)
 	{
 		set_time_limit(0);
-		$arrInfo=Model_Item::getInfoFromUrl($url);
-		Model_Item::insertData($arrInfo[0]);//insert fromurl param into db or not
-		$id=Model_item::getItemidFromForurl($arrInfo[0]);//get itemid
-		if(Model_draw::itemidIsInDb($id)) $qishu=Model_draw::getMaxQishuByItemid($id);//get qishu id
+		$arrInfo=Items::getInfoFromUrl($url);
+		Items::insertData($arrInfo[0]);//insert fromurl param into db or not
+		$id=items::getItemidFromForurl($arrInfo[0]);//get itemid
+		if(Draws::itemidIsInDb($id)) $qishu=Draws::getMaxQishuByItemid($id);//get qishu id
 		$qishu=(isset($qishu))?$qishu:1;
 		$total=(int)$arrInfo[1];
 		if($qishu<$total)
@@ -85,21 +89,21 @@ class GenerateDataFromWebController extends Controller
 							//"jiexiaotime"=>$fromOnepage['jiexiaotime'],
 									'itemid' => $id
 							);
-									$draw = Model_Draw::forge($allData[$s-$qishu-1]);
+								/* 	$draw = draws::forge($allData[$s-$qishu-1]);
 									if($draw and $draw->save())
-									continue;
+									continue; */
 					}
 					$ar[]=$str;
 					}
-					}
-					return isset($allData)?$allData:false;
 			}
+					return isset($allData)?$allData:false;
+	}
 			 
 	
 	
 			/*
 			*
-			*    	$arrInfo=Model_Item::getInfoFromUrl($url);
+			*    	$arrInfo=items::getInfoFromUrl($url);
 			$total=(int)$arrInfo[1];
 			for($s=1;$s<=$total;$s++)
 			{
@@ -124,9 +128,9 @@ class GenerateDataFromWebController extends Controller
 			$ar[]=$str;
 			}
 			return $allData;
-			/////$arrInfo=Model_Item::getInfoFromUrl($url);
-			$id=Model_item::getItemidFromForurl($arrInfo[0]);
-			$drawid=Model_draw::getMaxQishuByItemid($id);
+			/////$arrInfo=items::getInfoFromUrl($url);
+			$id=items::getItemidFromForurl($arrInfo[0]);
+			$drawid=draws::getMaxQishuByItemid($id);
 			$drawid=($drawid)?$drawid:1;
 			 
 			$total=(int)$arrInfo[1];
