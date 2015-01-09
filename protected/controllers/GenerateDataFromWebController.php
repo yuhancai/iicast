@@ -15,7 +15,7 @@ class GenerateDataFromWebController extends Controller
 		$default = stream_context_set_default($default_opts);	
 //print_r($this->getDataFromUrl("http://1.163.com/detail/01-48-00-07-53.html"));
 		
-		print_r($this->getAllDataFromUrl("http://1.163.com/detail/01-56-00-00-09.html"));
+		print_r($this->getAllDataFromUrl("http://1.163.com/detail/00-80-00-03-98.html"));
 		
 		$model=new GenerateDataForm();
 		
@@ -89,7 +89,24 @@ class GenerateDataFromWebController extends Controller
 							//"jiexiaotime"=>$fromOnepage['jiexiaotime'],
 									'itemid' => $id
 							);
-								/* 	$draw = draws::forge($allData[$s-$qishu-1]);
+					$model=new Draws;
+					$model->attributes=$allData[$s-$qishu-1];
+					$model->save();
+								/* 
+								 * // an SQL with two placeholders ":username" and ":email"
+$sql="INSERT INTO tbl_user (username, email) VALUES(:username,:email)";
+$command=$connection->createCommand($sql);
+// replace the placeholder ":username" with the actual username value
+$command->bindParam(":username",$username,PDO::PARAM_STR);
+// replace the placeholder ":email" with the actual email value
+$command->bindParam(":email",$email,PDO::PARAM_STR);
+$command->execute();
+// insert another row with a new set of parameters
+$command->bindParam(":username",$username2,PDO::PARAM_STR);
+$command->bindParam(":email",$email2,PDO::PARAM_STR);
+$command->execute();
+								 * 
+								 * 	$draw = draws::forge($allData[$s-$qishu-1]);
 									if($draw and $draw->save())
 									continue; */
 					}
