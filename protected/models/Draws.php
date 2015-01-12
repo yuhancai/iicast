@@ -17,6 +17,8 @@ class Draws extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
+    public $Bymins;
+    public $DrawsWeight;
 	public function tableName()
 	{
 		return 'tbl_draws';
@@ -63,6 +65,7 @@ class Draws extends CActiveRecord
 			'lucky_at' => 'Lucky At',
 			'open_at' => 'Open At',
 			'itemid' => 'Itemid',
+		    'Bymins'=>'min',
 		);
 	}
 
@@ -125,6 +128,23 @@ class Draws extends CActiveRecord
 		$minutes   = round($interval / 60);
 		return $minutes;
 	}
+	public static function caculateWeight($a,$w)
+    {
+        $b=array();
+        $c=count($a);
+    	for($i=0;$i<$c-$w+1;$i++)
+    	{
+    		$t=0;
+    		for($j=$i;$j<$w+$i;$j++)
+    		{
+    		$t+=$a[$j];		
+    		}
+    		$t=round($t/$w);
+    		$b[]=$t;
+            $t=0;		
+    	}
+    	return $b;
+    }
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
