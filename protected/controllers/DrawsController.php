@@ -234,7 +234,7 @@ class DrawsController extends Controller
                 $d_a[]=$d;
             }
     
-            $result ="(".$d_a[0]."+".$d_a[1].$d_a[2].")"."/3 =".round($result/3);
+            $result ="(".$d_a[0]."+".$d_a[1]."+".$d_a[2].")"."/3 =".round($result/3);
         }
     
         return $result;
