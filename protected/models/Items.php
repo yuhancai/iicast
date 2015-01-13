@@ -120,16 +120,6 @@ class Items extends CActiveRecord
 	 	//doing nothing
 	 }
     }   
-    public static function getInfoFromUrl($url)
-    {
-    	$pattern='/\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/';
-    	preg_match($pattern,$url, $matches);
-    	$d=implode(explode('-',$matches[0]));
-    	$a=array();
-    	$a[]=substr($matches[0],0,5);//for itemtype
-    	$a[]=substr($d,4);//for loops
-    	return $a;     	
-    }
     
     public static function getItemidFromForurl($fromurl)
     {

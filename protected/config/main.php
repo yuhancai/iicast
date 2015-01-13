@@ -16,6 +16,8 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+	    'ext.helpers.XHtml',
+	    'ext.helpers.Util',
 	),
 
 	'modules'=>array(
@@ -80,7 +82,7 @@ return array(
 			),
 		),
 	),
-
+    'timeZone' => 'Asia/Brunei',
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(

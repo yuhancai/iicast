@@ -15,7 +15,48 @@ class GenerateDataFromWebController extends Controller
 		$default = stream_context_set_default($default_opts);	
 //print_r($this->getDataFromUrl("http://1.163.com/detail/01-48-00-07-53.html"));
 		
-		print_r($this->getAllDataFromUrl("http://1.163.com/detail/00-80-00-03-98.html"));
+		print_r($this->getAllDataFromUrl("http://1.163.com/detail/01-48-00-08-33.html"));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+/* 		http://1.163.com/detail/01-37-00-19-31.html
+		http://1.163.com/detail/01-16-00-14-00.html
+		
+		http://1.163.com/detail/01-48-00-08-33.html  iPhone6 4.7英寸 64G
+		http://1.163.com/detail/01-77-00-05-20.html  iPhone6 Plus 5.5英寸 64G
+		http://1.163.com/detail/01-45-00-02-28.html   iPad Air 2 16G WIFI版
+		http://1.163.com/detail/00-95-00-00-44.html  HTC One （E8）时尚版 4G手机
+		http://1.163.com/detail/00-80-00-04-14.html  MacBook Air 13.3
+		http://1.163.com/detail/00-79-00-00-95.html  MacBook Air 11.6
+		http://1.163.com/detail/01-21-00-00-44.html  苹果Mac mini MD387CH/A
+		http://1.163.com/detail/01-68-00-01-66.html  漫步者 R10U 2.0声道
+		http://1.163.com/detail/00-50-00-01-00.html
+		http://1.163.com/detail/00-49-00-00-55.html
+		http://1.163.com/detail/00-74-00-01-58.html
+		http://1.163.com/detail/01-59-00-01-06.html
+		
+		http://1.163.com/detail/01-00-00-00-09.html
+		http://1.163.com/detail/00-43-00-01-49.html
+		http://1.163.com/detail/00-44-00-00-92.html
+		http://1.163.com/detail/01-40-00-00-17.html
+		http://1.163.com/detail/01-19-00-03-24.html
+		http://1.163.com/detail/01-76-00-00-40.html
+		http://1.163.com/detail/02-11-00-00-02.html
+		http://1.163.com/detail/02-01-00-00-50.html
+		http://1.163.com/detail/02-21-00-00-09.html
+		http://1.163.com/detail/01-96-00-00-05.html
+		http://1.163.com/detail/02-17-00-00-16.html
+		http://1.163.com/detail/01-39-00-00-20.html
+		http://1.163.com/detail/01-38-00-00-30.html */
 		
 		$model=new GenerateDataForm();
 		
@@ -54,9 +95,9 @@ class GenerateDataFromWebController extends Controller
 	public function getAllDataFromUrl($url=null)
 	{
 		set_time_limit(0);
-		$arrInfo=Items::getInfoFromUrl($url);
+		$arrInfo=Util::getInfoFromUrl($url);
 		Items::insertData($arrInfo[0]);//insert fromurl param into db or not
-		$id=items::getItemidFromForurl($arrInfo[0]);//get itemid
+		$id=Items::getItemidFromForurl($arrInfo[0]);//get itemid
 		if(Draws::itemidIsInDb($id)) $qishu=Draws::getMaxQishuByItemid($id);//get qishu id
 		$qishu=(isset($qishu))?$qishu:1;
 		$total=(int)$arrInfo[1];
@@ -120,7 +161,7 @@ $command->execute();
 	
 			/*
 			*
-			*    	$arrInfo=items::getInfoFromUrl($url);
+			*    	$arrInfo=Util::getInfoFromUrl($url);
 			$total=(int)$arrInfo[1];
 			for($s=1;$s<=$total;$s++)
 			{
@@ -145,7 +186,7 @@ $command->execute();
 			$ar[]=$str;
 			}
 			return $allData;
-			/////$arrInfo=items::getInfoFromUrl($url);
+			/////$arrInfo=Util::getInfoFromUrl($url);
 			$id=items::getItemidFromForurl($arrInfo[0]);
 			$drawid=draws::getMaxQishuByItemid($id);
 			$drawid=($drawid)?$drawid:1;

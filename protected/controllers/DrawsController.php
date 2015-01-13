@@ -55,6 +55,7 @@ class DrawsController extends Controller
                 'allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array(
                     'admin',
+                    'typical',
                     'delete'
                 ),
                 'users' => array(
@@ -181,7 +182,29 @@ class DrawsController extends Controller
             'model' => $model
         ));
     }
-
+    /**
+     * Manages all models.
+     */
+    public function actionTypical()
+    {
+     /*    $criteria = new CDbCriteria;
+        $criteria->select = array('*');
+        $criteria->condition = 'abs(strftime(\'%H\',open_at)) >'.date("H").' and abs(strftime(\'%H\',begin_at))=8';
+        $result=Draws::model()->findAll($criteria);    */  
+        $dataProvider=new CActiveDataProvider('Draws', array(
+            'criteria'=>array(
+                'condition'=>'abs(strftime(\'%H\',open_at)) >'.date("H").' and abs(strftime(\'%H\',begin_at))=13',
+            ),
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+        ));
+        
+        $this->render('typical', array(
+            'model' => $dataProvider
+        ));
+    }
+    
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
@@ -207,16 +230,16 @@ class DrawsController extends Controller
         $sql .= ' limit 2';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         $result = '';
-        if (! empty($rows)) {
+        if (! empty($rows)&&count($rows)==2) {
             foreach ($rows as $row) {
-                $d=Draws::caculateDiffByMinutes($row['begin_at'], $row['lucky_at']);
+                $d=Util::caculateDiffByMinutes($row['begin_at'], $row['lucky_at']);
                 $result +=$d . '<br/>';
                 $d_a[]=$d;
             }
 
-                $result ="(".$d_a[0]."+".$d_a[1].")"."/2 =".round($result/2);
+                $result =round($result/2)."="."(".$d_a[0]."+".$d_a[1].")"."/2";
         }
-        
+        else $result=0;
         return $result;
     }
     protected function c3weight($data, $row)
@@ -227,16 +250,16 @@ class DrawsController extends Controller
         $sql .= ' limit 3';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         $result = '';
-        if (! empty($rows)) {
+        if (! empty($rows)&&count($rows)==3) {
             foreach ($rows as $row) {
-                $d=Draws::caculateDiffByMinutes($row['begin_at'], $row['lucky_at']);
+                $d=Util::caculateDiffByMinutes($row['begin_at'], $row['lucky_at']);
                 $result +=$d . '<br/>';
                 $d_a[]=$d;
             }
     
-            $result ="(".$d_a[0]."+".$d_a[1]."+".$d_a[2].")"."/3 =".round($result/3);
+            $result =round($result/3)."="."(".$d_a[0]."+".$d_a[1]."+".$d_a[2].")"."/3 ";
         }
-    
+        else $result=0;
         return $result;
     }
     /**

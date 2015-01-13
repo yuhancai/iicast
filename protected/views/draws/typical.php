@@ -8,20 +8,7 @@ $this->breadcrumbs = array(
     'Manage'
 );
 
-$this->menu = array(
-    array(
-        'label' => 'List Draws',
-        'url' => array(
-            'index'
-        )
-    ),
-    array(
-        'label' => 'Create Draws',
-        'url' => array(
-            'create'
-        )
-    )
-);
+
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -36,33 +23,14 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
-<h1>Manage Draws</h1>
-
-<p>
-	You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>,
-	<b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b> or <b>=</b>) at the
-	beginning of each of your search values to specify how the comparison
-	should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display: none">
-<?php
-
-$this->renderPartial('_search', array(
-    'model' => $model
-));
-?>
-</div>
 <!-- search-form -->
 
 <?php
 
 $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'draws-grid',
-        'dataProvider' => $model->search(),
-        'filter' => $model,
+        'dataProvider' => $model,
+        //'filter' => $model,
         'pager' => array(
             'class' => 'SimplaPager',
             'cssFile' => Yii::app()->baseUrl.'/css/gridViewStyle/pager.css',
@@ -103,38 +71,39 @@ $this->widget('zii.widgets.grid.CGridView', array(
                         'width' => '90px'
                     )
                 ),
-                array(
-                    'name' => 'itemid',
-                    'filter' => CHtml::listData(Items::model()->findAll(), 'id', 'itemname'),
-                    // ok 'filter' => CHtml::activeDropDownList($model, 'itemid', CHtml::listData(Items::model()->findAll(), 'id', 'itemname'), array('prompt' => '66 ')),
-                    'value' => '$data->item->itemname',
-                    'htmlOptions' => array(
-                            'width' => '130px'
-                        )
-                ),
-                array(
-                    'name' => 'Bymins',
-                    'value' => 'Util::caculateDiffByMinutes($data->begin_at,$data->lucky_at)',
-                    'htmlOptions' => array(
-                            'width' => '40px'
-                        )
-                ),
-                array(
-                    'name' => 'DrawsWeight',
-                    'type'=>'raw',
-                    'value'=>array($this,'cweight'), 
-                    'htmlOptions' => array(
-                            'width' => '100px'
-                        )
-                ),
-                array(
-                    'name' => 'DrawsWeight',
-                    'type'=>'raw',
-                    'value'=>array($this,'c3weight'),
-                    'htmlOptions' => array(
-                        'width' => '120px'
-                    )
-                ),
+
+            array(
+                'name' => 'itemid',
+                'filter' => CHtml::listData(Items::model()->findAll(), 'id', 'itemname'),
+                // ok 'filter' => CHtml::activeDropDownList($model, 'itemid', CHtml::listData(Items::model()->findAll(), 'id', 'itemname'), array('prompt' => '66 ')),
+                'value' => '$data->item->itemname',
+                'htmlOptions' => array(
+                    'width' => '130px'
+                )
+            ),
+            array(
+                'name' => 'Bymins',
+                'value' => 'Util::caculateDiffByMinutes($data->begin_at,$data->lucky_at)',
+                'htmlOptions' => array(
+                    'width' => '40px'
+                )
+            ),
+            array(
+                'name' => 'DrawsWeight',
+                'type'=>'raw',
+                'value'=>array($this,'cweight'),
+                'htmlOptions' => array(
+                    'width' => '100px'
+                )
+            ),
+            array(
+                'name' => 'DrawsWeight',
+                'type'=>'raw',
+                'value'=>array($this,'c3weight'),
+                'htmlOptions' => array(
+                    'width' => '120px'
+                )
+            ),
                 array(
                     'header' => 'Actions',                    
                     'class' => 'CButtonColumn',

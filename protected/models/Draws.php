@@ -120,31 +120,17 @@ class Draws extends CActiveRecord
         ->queryAll();
 		return (count($result)>0)?1:0;
 	}
-	public static function caculateDiffByMinutes($start,$end)
+	public static function getDrawsByHour($itemid)
 	{
-		$datetime1 = strtotime($start);
-		$datetime2 = strtotime($end);
-		$interval  = abs($datetime2 - $datetime1);
-		$minutes   = round($interval / 60);
-		return $minutes;
+	    $result= Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('tbl_draws')
+	    ->where('itemid=:itemid', array(':itemid'=>$itemid))
+	    ->order('qishu desc')
+	    ->limit('1')
+	    ->queryAll();
+	    return $result[0]['qishu'];
 	}
-	public static function caculateWeight($a,$w)
-    {
-        $b=array();
-        $c=count($a);
-    	for($i=0;$i<$c-$w+1;$i++)
-    	{
-    		$t=0;
-    		for($j=$i;$j<$w+$i;$j++)
-    		{
-    		$t+=$a[$j];		
-    		}
-    		$t=round($t/$w);
-    		$b[]=$t;
-            $t=0;		
-    	}
-    	return $b;
-    }
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
