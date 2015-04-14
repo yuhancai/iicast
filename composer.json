@@ -1,0 +1,5 @@
+{
+    "require": {
+        "yiisoft/yii2-twig": "~2.0"
+    }
+}

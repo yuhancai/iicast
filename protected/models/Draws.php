@@ -19,6 +19,7 @@ class Draws extends CActiveRecord
 	 */
     public $Bymins;
     public $DrawsWeight;
+    public $itemname;
 	public function tableName()
 	{
 		return 'tbl_draws';
@@ -32,11 +33,11 @@ class Draws extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('qishu, luckynum, begin_at, lucky_at, open_at, itemid', 'required'),
+			array('qishu, luckynum, begin_at, lucky_at, open_at, itemid,itemname,bymins', 'required'),
 			array('qishu, luckynum, itemid', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, qishu, luckynum, begin_at, lucky_at, open_at, itemid', 'safe', 'on'=>'search'),
+			array('id, qishu, luckynum, begin_at, lucky_at, open_at, itemid, itemname,bymins', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -98,6 +99,54 @@ class Draws extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	public function searchCurrent()
+	{
+    	$criteria=new CDbCriteria;
+    	
+/*     	$criteria->with = array('item'=> array('alias'=>'i'));
+    	$criteria->compare('id',$this->id);
+    	$criteria->compare('qishu',$this->qishu);
+    	$criteria->compare('luckynum',$this->luckynum);
+    	$criteria->compare('begin_at',$this->begin_at,true);
+    	$criteria->compare('lucky_at',$this->lucky_at,true);
+    	$criteria->compare('open_at',$this->open_at,true);
+    	$criteria->compare('itemid',$this->itemid);  */
+    	
+    	
+   /*  	$criteria = new CDbCriteria;
+    	// Classic method
+    	$criteria->addCondition('t.id = :id');
+    	$criteria->params = array(':id' => Yii::app()->user->id);
+    	// Often used in search functions. Note: if passed value is empty, the WHERE is not added!
+    	$criteria->compare('t.id', Yii::app()->user->id);
+    	// This is my current favorite
+    	$criteria->addColumnCondition(array('t.id' => Yii::app()->user->id));
+    	// A bit weird here, but you can also do this
+    	$criteria->addInCondition('t.id', array(Yii::app()->user->id)); */
+    	
+    	
+    	/*      $criteria = new CDbCriteria();
+    	 $criteria->with = array('tweTicketPriceLevels' => array('alias'=>'pl'));
+    	 $criteria->condition = "(pl.start_timestamp - interval ':etz seconds') < (LOCALTIMESTAMP - interval ':stz seconds')";
+    	 $criteria->addCondition("(pl.end_timestamp - interval ':etz seconds') >= (LOCALTIMESTAMP - interval ':stz seconds')");
+    	 $criteria->addCondition('t.event_id = :eid');
+    	 $criteria->addCondition('t.deleted IS NULL');
+    	 $criteria->addCondition('pl.deleted IS NULL');
+    	 $criteria->params = array(':etz' => (int)$etz, ':stz' => (int)$stz_offset, ':eid' => (int)$eid);
+    	
+    	 return self::model()->findAll($criteria); */
+    	
+    	$criteria->compare('itemid',$this->itemid);
+    	$criteria->addColumnCondition(array('t.itemid' => $this->itemid));
+    	$criteria->condition = "abs(strftime('%H',lucky_at)) >".date('H')." and abs(strftime('%H',begin_at))=10";
+    	//$criteria->params = array(':selecthour' =>$selecthour);
+    	return new CActiveDataProvider($this, array(
+    	    'criteria'=>$criteria,
+    	    'pagination'=>array(
+    	        'pageSize'=>20,
+    	    ),
+    	   ));
 	}
 	public static function getMaxQishuByItemid($itemid)
 	{

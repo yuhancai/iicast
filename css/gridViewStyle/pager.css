@@ -42,7 +42,7 @@ li.page, li.next, li.previous {margin:0}
 
 .grid-view table.items th a:hover
 {
-	/*color: #fff;*/
+	color: #aff;
 }
 
 .grid-view table.items th a.asc

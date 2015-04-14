@@ -10,6 +10,8 @@ $this->breadcrumbs = array(
 
 
 
+
+
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -26,11 +28,21 @@ $('.search-form form').submit(function(){
 <!-- search-form -->
 
 <?php
+$columns = array(
+    array(
+        'header'=>CHtml::encode('Name'),
+        'name'=>'username',
+    ),
+    array(
+        'header'=>CHtml::encode('Organisation'),
+        'name'=>'organisation',
+    ),
+);
 
 $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'draws-grid',
         'dataProvider' => $model,
-        //'filter' => $model,
+        'filter' => $filtersForm,
         'pager' => array(
             'class' => 'SimplaPager',
             'cssFile' => Yii::app()->baseUrl.'/css/gridViewStyle/pager.css',
@@ -71,16 +83,34 @@ $this->widget('zii.widgets.grid.CGridView', array(
                         'width' => '90px'
                     )
                 ),
-
+            
             array(
-                'name' => 'itemid',
-                'filter' => CHtml::listData(Items::model()->findAll(), 'id', 'itemname'),
-                // ok 'filter' => CHtml::activeDropDownList($model, 'itemid', CHtml::listData(Items::model()->findAll(), 'id', 'itemname'), array('prompt' => '66 ')),
+                'name' => 'itemname',
+                'filter' => CHtml::listData(Items::model()->findAll(), 'id','itemname'),
                 'value' => '$data->item->itemname',
                 'htmlOptions' => array(
                     'width' => '130px'
                 )
             ),
+            
+
+/*             array(
+                'name' => 'itemname',
+                //'filter' => CHtml::listData(Items::model()->with('i')->findAll(), 'i.id','itemname'),
+              'filter' => CHtml::activeDropDownList($model, 'itemid', CHtml::listData(Items::model()->findAll(
+                  array(  'order'=>'t.id asc',
+                          'select'=>array('*'),
+                          'distinct'=>true,   
+                          'join'=>'JOIN tbl_draws d ON t.id=d.itemid',
+                          'condition'=>'abs(strftime(\'%H\',lucky_at)) >'.date("H").' and abs(strftime(\'%H\',begin_at))=10',
+                         // 'params'=>array(':status'=>'3')
+                        
+                         )), 'id', 'itemname'), array('prompt' => ' ')),
+                'value' => '$data->item->itemname',
+                'htmlOptions' => array(
+                    'width' => '130px'
+                )
+            ), */
             array(
                 'name' => 'Bymins',
                 'value' => 'Util::caculateDiffByMinutes($data->begin_at,$data->lucky_at)',
@@ -88,7 +118,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     'width' => '40px'
                 )
             ),
-            array(
+ /*            array(
                 'name' => 'DrawsWeight',
                 'type'=>'raw',
                 'value'=>array($this,'cweight'),
@@ -103,7 +133,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 'htmlOptions' => array(
                     'width' => '120px'
                 )
-            ),
+            ), */
                 array(
                     'header' => 'Actions',                    
                     'class' => 'CButtonColumn',

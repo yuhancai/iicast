@@ -187,21 +187,51 @@ class DrawsController extends Controller
      */
     public function actionTypical()
     {
-     /*    $criteria = new CDbCriteria;
+        // Create filter model and set properties
+        $filtersForm=new FiltersForm;
+        if (isset($_GET['FiltersForm']))
+        $filtersForm->filters=$_GET['FiltersForm']; 
+        $criteria = new CDbCriteria;
         $criteria->select = array('*');
         $criteria->condition = 'abs(strftime(\'%H\',open_at)) >'.date("H").' and abs(strftime(\'%H\',begin_at))=8';
-        $result=Draws::model()->findAll($criteria);    */  
-        $dataProvider=new CActiveDataProvider('Draws', array(
-            'criteria'=>array(
-                'condition'=>'abs(strftime(\'%H\',open_at)) >'.date("H").' and abs(strftime(\'%H\',begin_at))=13',
+        $result=Draws::model()->with('item')->findAll($criteria);     
+        $count=Draws::model()->count($criteria);
+        $pages=new CPagination($count);
+        $pages->setPageSize(20);
+        //Draws::model()->setAttrubites("bymins");      
+  
+        $sort = new CSort();
+        $sort->attributes = array(
+            'luckynum', 'begin_at', 'lucky_at', 'open_at','itemname','Bymins',
+            'qishu'=>array(
+                'asc'=>'qishu DESC',
+                'desc'=>'qishu ASC',
             ),
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-        ));
+        );
+        $sort->route = 'draws/typical';
+        $filteredData=$filtersForm->filter($result);
+        $dataProvider=new CArrayDataProvider($filteredData,array(
+            'sort'=>$sort,
+            'pagination'=>$pages,
+        )
+        );
+       // $dataProvider->sort = $sort;
+        $dataProvider->sort->defaultOrder='qishu DESC';   
+        
+     
+        
+        
+ 
+   /*      $item=Draws::model()->with('item')->findAll();
+        $model = new Draws('searchCurrent');
+        $model->unsetAttributes(); // clear any default values
+        if (isset($_GET['Draws']))
+            $model->attributes = $_GET['Draws'];   */
         
         $this->render('typical', array(
-            'model' => $dataProvider
+            'model' => $dataProvider,
+            'filtersForm' => $filtersForm,
+            //'item'=>$item,
         ));
     }
     
